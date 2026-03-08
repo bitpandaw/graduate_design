@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Wide & Deep 推荐服务 FastAPI（论文第4章：推荐服务模块实现）
+SASRec 推荐服务 FastAPI
 
 接口：
   GET  /health                           健康检查
   POST /recommend                        获取推荐商品 ID 列表（含分数）
-  POST /behavior/score                   单条行为特征预测
+  POST /behavior/score                   序列 + 候选商品的 next-item 概率
   GET  /model/info                       模型配置信息
 
 Java RecommendationEngine 通过 HTTP 调用本服务。
-推荐响应时延目标：< 200ms（论文第4章非功能性需求）
+推荐响应时延目标：< 200ms
 """
 
 import json
@@ -18,71 +18,52 @@ import time
 from contextlib import asynccontextmanager
 from typing import Optional
 
-import numpy as np
 import torch
+import torch.nn.functional as F
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-from model import WideAndDeepModel
+from model import SASRecModel
 
 # ─── 常量 ────────────────────────────────────────────────────────
 MODEL_DIR = os.environ.get("MODEL_DIR", "model")
-CONFIG_PATH = os.path.join(MODEL_DIR, "wide_deep.config.json")
-MODEL_PATH = os.path.join(MODEL_DIR, "wide_deep.best.pt")
-
-CATEGORY_MAP = {
-    "ELECTRONICS": 1,
-    "CLOTHING": 2,
-    "HOME_GOODS": 3,
-    "BOOKS": 4,
-    "SPORTS": 5,
-}
-
-BEHAVIOR_WEIGHTS = {
-    "VIEW": 1.0,
-    "CLICK": 2.0,
-    "ADD_CART": 3.0,
-    "RATE": 4.0,
-    "PURCHASE": 5.0,
-}
+CONFIG_PATH = os.path.join(MODEL_DIR, "sasrec.config.json")
+MODEL_PATH = os.path.join(MODEL_DIR, "sasrec.best.pt")
 
 # ─── 全局状态 ─────────────────────────────────────────────────────
-_model: Optional[WideAndDeepModel] = None
+_model: Optional[SASRecModel] = None
 _config: Optional[dict] = None
-_cluster_map: Optional[dict] = None
 
 
 def load_model():
-    global _model, _config, _cluster_map
+    global _model, _config
 
     if not os.path.exists(CONFIG_PATH):
         print(f"[警告] 模型配置不存在: {CONFIG_PATH}，将使用默认冷启动配置")
-        # 冷启动：使用默认参数（未训练）
         _config = {
-            "num_users": 1000,
-            "num_products": 500,
-            "num_categories": 5,
-            "num_clusters": 10,
-            "embedding_dim": 32,
-            "cluster_map": {},
+            "num_items": 500,
+            "max_len": 50,
+            "embedding_dim": 64,
+            "num_blocks": 2,
+            "num_heads": 2,
+            "dropout": 0.1,
         }
     else:
         with open(CONFIG_PATH, "r", encoding="utf-8") as f:
             _config = json.load(f)
 
-    _cluster_map = {int(k): v for k, v in _config.get("cluster_map", {}).items()}
-
-    _model = WideAndDeepModel(
-        num_users=_config["num_users"],
-        num_products=_config["num_products"],
-        num_categories=_config["num_categories"],
-        num_clusters=_config["num_clusters"],
-        embedding_dim=_config.get("embedding_dim", 32),
+    _model = SASRecModel(
+        num_items=_config["num_items"],
+        max_len=_config["max_len"],
+        embedding_dim=_config.get("embedding_dim", 64),
+        num_blocks=_config.get("num_blocks", 2),
+        num_heads=_config.get("num_heads", 2),
+        dropout=_config.get("dropout", 0.1),
     )
 
     if os.path.exists(MODEL_PATH):
         _model.load_state_dict(torch.load(MODEL_PATH, map_location="cpu"))
-        print(f"✅ 已加载训练模型: {MODEL_PATH}")
+        print(f"[OK] 已加载训练模型: {MODEL_PATH}")
     else:
         print(f"[信息] 未找到训练权重 {MODEL_PATH}，使用随机初始化（冷启动模式）")
 
@@ -91,15 +72,15 @@ def load_model():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("启动推荐服务，加载 Wide & Deep 模型...")
+    print("启动推荐服务，加载 SASRec 模型...")
     load_model()
     yield
     print("推荐服务关闭")
 
 
 app = FastAPI(
-    title="Wide & Deep 推荐服务",
-    description="基于 Wide & Deep 模型的个性化推荐 API（论文第3-4章实现）",
+    title="SASRec 推荐服务",
+    description="基于 SASRec 序列推荐的个性化推荐 API",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -108,8 +89,8 @@ app = FastAPI(
 # ─── 请求/响应模型 ────────────────────────────────────────────────
 class RecommendRequest(BaseModel):
     userId: int
-    candidateProductIds: list[int]       # 候选商品 ID 列表（由 Java 传入）
-    categoryHint: Optional[str] = None  # 用户最近偏好类别（可选）
+    candidateProductIds: list[int]
+    recentItemIds: Optional[list[int]] = None  # 用户最近行为序列，按时间升序
     limit: int = 10
 
 
@@ -120,52 +101,53 @@ class ProductScore(BaseModel):
 
 class RecommendResponse(BaseModel):
     userId: int
-    recommendations: list[ProductScore]  # 按 score 降序排列
+    recommendations: list[ProductScore]
     latencyMs: float
-    modelMode: str                        # "trained" 或 "cold_start"
+    modelMode: str
 
 
 class BehaviorScoreRequest(BaseModel):
-    userId: int
+    recentItemIds: list[int]
     productId: int
-    categoryId: int
-    behaviorType: str = "VIEW"
 
 
 # ─── 工具函数 ─────────────────────────────────────────────────────
-def _clamp_id(val: int, max_val: int) -> int:
-    """将 ID clamp 到模型范围内，超出的用 0（padding）"""
-    return val if 1 <= val <= max_val else 0
+def _build_seq(recent: list[int], max_len: int) -> torch.Tensor:
+    """构建输入序列，左 padding 到 max_len"""
+    seq = (recent or [])[-max_len:]
+    padded = [0] * max(0, max_len - len(seq)) + seq
+    return torch.tensor([padded], dtype=torch.long)
 
 
-def _predict_scores(
-    user_id: int,
-    product_ids: list[int],
-    category_id: int,
-    behavior_score: float,
+def _predict_scores_sasrec(
+    recent_item_ids: list[int],
+    candidate_product_ids: list[int],
 ) -> list[float]:
-    """批量预测用户对商品列表的偏好分数"""
+    """基于 SASRec 对候选商品打分（next-item logits 转为概率）"""
     if _model is None:
-        return [0.5] * len(product_ids)
+        return [0.5] * len(candidate_product_ids)
 
-    n = len(product_ids)
-    uid_clamped = _clamp_id(user_id, _config["num_users"])
-    cat_clamped = min(max(category_id, 1), _config["num_categories"])
+    max_len = _config["max_len"]
+    num_items = _config["num_items"]
 
-    uid_t = torch.tensor([uid_clamped] * n, dtype=torch.long)
-    pid_t = torch.tensor(
-        [_clamp_id(p, _config["num_products"]) for p in product_ids],
-        dtype=torch.long,
-    )
-    cat_t = torch.tensor([cat_clamped] * n, dtype=torch.long)
-    cluster_t = torch.tensor(
-        [_cluster_map.get(p, 0) for p in product_ids],
-        dtype=torch.long,
-    )
-    score_t = torch.tensor([behavior_score] * n, dtype=torch.float)
+    seq = _build_seq(recent_item_ids, max_len)
 
     with torch.no_grad():
-        probs = _model(uid_t, pid_t, cat_t, cluster_t, score_t)  # (n,)
+        logits = _model(seq, return_all_positions=False)
+    # logits: (1, num_items)，索引 i 对应物品 i+1
+    logits = logits.squeeze(0)
+
+    scores = []
+    for pid in candidate_product_ids:
+        if 1 <= pid <= num_items:
+            s = logits[pid - 1].item()
+            scores.append(s)
+        else:
+            scores.append(float("-inf"))
+
+    # 转为 softmax 概率便于展示；排序只关心相对大小
+    all_scores = torch.tensor(scores, dtype=torch.float32)
+    probs = F.softmax(all_scores, dim=0)
     return probs.tolist()
 
 
@@ -184,43 +166,35 @@ def model_info():
     if _config is None:
         raise HTTPException(status_code=503, detail="模型未加载")
     return {
-        "config": {k: v for k, v in _config.items() if k != "cluster_map"},
+        "config": _config,
         "model_file": MODEL_PATH,
         "model_exists": os.path.exists(MODEL_PATH),
-        "cluster_count": len(_cluster_map) if _cluster_map else 0,
     }
 
 
 @app.post("/recommend", response_model=RecommendResponse)
 def recommend(req: RecommendRequest):
     """
-    核心推荐接口：对候选商品列表打分，按分数降序返回 TopK
-
-    论文非功能需求：Wide & Deep 推理 < 200ms
+    核心推荐接口：给定用户最近行为序列，对候选商品打分，按分数降序返回 TopK
+    冷启动（recentItemIds 为空）：返回均匀分数
     """
     t0 = time.perf_counter()
 
     if not req.candidateProductIds:
         raise HTTPException(status_code=400, detail="candidateProductIds 不能为空")
 
-    # 确定类别 ID
-    category_id = CATEGORY_MAP.get(req.categoryHint or "", 1)
+    recent = req.recentItemIds or []
 
-    # 推理
-    scores = _predict_scores(
-        user_id=req.userId,
-        product_ids=req.candidateProductIds,
-        category_id=category_id,
-        behavior_score=BEHAVIOR_WEIGHTS.get("VIEW", 1.0),
-    )
+    if not recent:
+        scores = [0.5] * len(req.candidateProductIds)
+    else:
+        scores = _predict_scores_sasrec(recent, req.candidateProductIds)
 
-    # 组合并排序
     scored = sorted(
         zip(req.candidateProductIds, scores),
         key=lambda x: x[1],
         reverse=True,
     )
-
     top_k = scored[: req.limit]
     latency_ms = (time.perf_counter() - t0) * 1000
 
@@ -234,19 +208,12 @@ def recommend(req: RecommendRequest):
 
 @app.post("/behavior/score")
 def behavior_score(req: BehaviorScoreRequest):
-    """预测单条行为的偏好分数（用于调试）"""
-    behavior_w = BEHAVIOR_WEIGHTS.get(req.behaviorType, 1.0)
-    scores = _predict_scores(
-        user_id=req.userId,
-        product_ids=[req.productId],
-        category_id=req.categoryId,
-        behavior_score=behavior_w,
-    )
+    """给定序列 + 单个候选商品，返回 next-item 概率（调试用）"""
+    scores = _predict_scores_sasrec(req.recentItemIds, [req.productId])
     return {
-        "userId": req.userId,
+        "recentItemIds": req.recentItemIds,
         "productId": req.productId,
         "score": round(scores[0], 4),
-        "behaviorType": req.behaviorType,
         "modelMode": "trained" if os.path.exists(MODEL_PATH) else "cold_start",
     }
 

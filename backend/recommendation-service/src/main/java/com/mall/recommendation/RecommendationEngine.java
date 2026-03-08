@@ -4,31 +4,36 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.mall.recommendation.model.UserBehavior;
+import com.mall.recommendation.repository.UserBehaviorRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Wide & Deep 推荐引擎（论文第3-4章实现）
+ * SASRec 推荐引擎
  *
  * 调用 Python FastAPI 推理服务（端口 8090），实现：
- *   - Wide 部分：user_id × category 特征交叉（记忆能力）
- *   - Deep 部分：Embedding → MLP（泛化能力）
- *   - K-means 商品聚类 ClusterID 特征融合
+ *   - 基于用户行为序列的 next-item 预测
+ *   - 传入 recentItemIds（用户最近行为按时间升序）
  *
- * 推理延迟目标：< 200ms（论文非功能需求）
+ * 推理延迟目标：< 200ms
  * 降级策略：Python 服务不可用时，回退到热度排序（冷启动）
  */
 @Slf4j
 @Service
 public class RecommendationEngine {
+
+    private static final int MAX_SEQ_LEN = 50;
 
     @Value("${recommendation.python.url:http://localhost:8090}")
     private String pythonServiceUrl;
@@ -36,29 +41,28 @@ public class RecommendationEngine {
     @Value("${recommendation.candidate.pool:50}")
     private int candidatePoolSize;
 
-    private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
+    private final RestTemplate restTemplate = new RestTemplate();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public RecommendationEngine() {
-        this.restTemplate = new RestTemplate();
-        this.objectMapper = new ObjectMapper();
+    private final UserBehaviorRepository userBehaviorRepository;
+
+    public RecommendationEngine(UserBehaviorRepository userBehaviorRepository) {
+        this.userBehaviorRepository = userBehaviorRepository;
     }
 
     /**
-     * 获取用户个性化推荐商品 ID 列表（按 Wide & Deep 分数降序）
+     * 获取用户个性化推荐商品 ID 列表（按 SASRec 分数降序）
      *
      * @param userId 用户 ID
      * @param limit  返回商品数量
      * @return 商品 ID 列表（降序排列）
      */
     public List<Long> recommend(Long userId, int limit) {
-        // 生成候选商品池（实际应从商品库过滤，此处取前 N 个商品 ID）
         List<Integer> candidateIds = generateCandidatePool(candidatePoolSize);
-
         try {
             return callPythonService(userId, candidateIds, limit);
         } catch (RestClientException e) {
-            log.warn("Wide & Deep 推理服务不可用，降级到热度排序. cause={}", e.getMessage());
+            log.warn("SASRec 推理服务不可用，降级到热度排序. cause={}", e.getMessage());
             return fallbackRecommend(limit);
         } catch (Exception e) {
             log.error("推荐服务异常", e);
@@ -67,9 +71,10 @@ public class RecommendationEngine {
     }
 
     /**
-     * 获取推荐结果（含分数）
+     * 获取推荐结果（含 SASRec 分数）
      */
     public List<ProductScore> recommendWithScores(Long userId, List<Integer> candidateIds, int limit) {
+        List<Integer> recentItemIds = getRecentItemIds(userId);
         try {
             String url = pythonServiceUrl + "/recommend";
 
@@ -77,6 +82,8 @@ public class RecommendationEngine {
             body.put("userId", userId);
             ArrayNode idsNode = body.putArray("candidateProductIds");
             candidateIds.forEach(idsNode::add);
+            ArrayNode recentNode = body.putArray("recentItemIds");
+            recentItemIds.forEach(recentNode::add);
             body.put("limit", limit);
 
             String response = restTemplate.postForObject(url, body, String.class);
@@ -117,15 +124,28 @@ public class RecommendationEngine {
 
     // ─── 私有方法 ──────────────────────────────────────────────────
 
+    private List<Integer> getRecentItemIds(Long userId) {
+        List<UserBehavior> behaviors = userBehaviorRepository
+                .findByUserIdOrderByCreatedAtDesc(userId, PageRequest.of(0, MAX_SEQ_LEN));
+        List<Integer> ids = behaviors.stream()
+                .map(b -> b.getProductId().intValue())
+                .collect(Collectors.toList());
+        Collections.reverse(ids);
+        return ids;
+    }
+
     private List<Long> callPythonService(Long userId, List<Integer> candidateIds, int limit)
             throws Exception {
 
         String url = pythonServiceUrl + "/recommend";
+        List<Integer> recentItemIds = getRecentItemIds(userId);
 
         ObjectNode body = objectMapper.createObjectNode();
         body.put("userId", userId);
         ArrayNode idsNode = body.putArray("candidateProductIds");
         candidateIds.forEach(idsNode::add);
+        ArrayNode recentNode = body.putArray("recentItemIds");
+        recentItemIds.forEach(recentNode::add);
         body.put("limit", limit);
 
         long t0 = System.currentTimeMillis();
@@ -133,9 +153,9 @@ public class RecommendationEngine {
         long latency = System.currentTimeMillis() - t0;
 
         if (latency > 200) {
-            log.warn("Wide & Deep 推理延迟超标: {}ms (目标 <200ms)", latency);
+            log.warn("SASRec 推理延迟超标: {}ms (目标 <200ms)", latency);
         } else {
-            log.debug("Wide & Deep 推理延迟: {}ms", latency);
+            log.debug("SASRec 推理延迟: {}ms", latency);
         }
 
         JsonNode root = objectMapper.readTree(response);
@@ -171,7 +191,7 @@ public class RecommendationEngine {
     }
 
     /**
-     * 推荐结果（含 Wide & Deep 分数）
+     * 推荐结果（含 SASRec 分数）
      */
     public record ProductScore(Long productId, double score) {}
 }

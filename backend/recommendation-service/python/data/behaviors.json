@@ -1,0 +1,1100 @@
+[
+  {
+    "userId": 1,
+    "productId": 1,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 10:00:00"
+  },
+  {
+    "userId": 1,
+    "productId": 1,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-01 10:01:00"
+  },
+  {
+    "userId": 1,
+    "productId": 1,
+    "behaviorType": "ADD_CART",
+    "createdAt": "2026-01-01 10:05:00"
+  },
+  {
+    "userId": 1,
+    "productId": 1,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-01 10:10:00"
+  },
+  {
+    "userId": 1,
+    "productId": 2,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 09:00:00"
+  },
+  {
+    "userId": 1,
+    "productId": 2,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-02 09:05:00"
+  },
+  {
+    "userId": 1,
+    "productId": 4,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 14:00:00"
+  },
+  {
+    "userId": 1,
+    "productId": 4,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-03 14:30:00"
+  },
+  {
+    "userId": 1,
+    "productId": 8,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-05 11:00:00"
+  },
+  {
+    "userId": 1,
+    "productId": 11,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-06 16:00:00"
+  },
+  {
+    "userId": 1,
+    "productId": 11,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-06 16:02:00"
+  },
+  {
+    "userId": 1,
+    "productId": 19,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-07 10:00:00"
+  },
+  {
+    "userId": 1,
+    "productId": 64,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-08 20:00:00"
+  },
+  {
+    "userId": 1,
+    "productId": 64,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-08 20:15:00"
+  },
+  {
+    "userId": 2,
+    "productId": 21,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 12:00:00"
+  },
+  {
+    "userId": 2,
+    "productId": 22,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 12:10:00"
+  },
+  {
+    "userId": 2,
+    "productId": 22,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-01 12:15:00"
+  },
+  {
+    "userId": 2,
+    "productId": 22,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-01 12:30:00"
+  },
+  {
+    "userId": 2,
+    "productId": 23,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 15:00:00"
+  },
+  {
+    "userId": 2,
+    "productId": 24,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 15:20:00"
+  },
+  {
+    "userId": 2,
+    "productId": 24,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-02 15:25:00"
+  },
+  {
+    "userId": 2,
+    "productId": 27,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 10:00:00"
+  },
+  {
+    "userId": 2,
+    "productId": 28,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 10:30:00"
+  },
+  {
+    "userId": 2,
+    "productId": 8,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-04 20:00:00"
+  },
+  {
+    "userId": 2,
+    "productId": 8,
+    "behaviorType": "ADD_CART",
+    "createdAt": "2026-01-04 20:10:00"
+  },
+  {
+    "userId": 2,
+    "productId": 8,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-04 20:30:00"
+  },
+  {
+    "userId": 3,
+    "productId": 2,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 08:00:00"
+  },
+  {
+    "userId": 3,
+    "productId": 2,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-01 08:10:00"
+  },
+  {
+    "userId": 3,
+    "productId": 2,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-01 08:30:00"
+  },
+  {
+    "userId": 3,
+    "productId": 25,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 10:00:00"
+  },
+  {
+    "userId": 3,
+    "productId": 25,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-02 10:30:00"
+  },
+  {
+    "userId": 3,
+    "productId": 19,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 14:00:00"
+  },
+  {
+    "userId": 3,
+    "productId": 19,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-03 14:05:00"
+  },
+  {
+    "userId": 3,
+    "productId": 19,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-04 09:00:00"
+  },
+  {
+    "userId": 3,
+    "productId": 14,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-05 11:00:00"
+  },
+  {
+    "userId": 3,
+    "productId": 20,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-06 16:00:00"
+  },
+  {
+    "userId": 4,
+    "productId": 10,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 19:00:00"
+  },
+  {
+    "userId": 4,
+    "productId": 10,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-01 19:05:00"
+  },
+  {
+    "userId": 4,
+    "productId": 27,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 20:00:00"
+  },
+  {
+    "userId": 4,
+    "productId": 27,
+    "behaviorType": "ADD_CART",
+    "createdAt": "2026-01-02 20:10:00"
+  },
+  {
+    "userId": 4,
+    "productId": 34,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 12:00:00"
+  },
+  {
+    "userId": 4,
+    "productId": 87,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 12:30:00"
+  },
+  {
+    "userId": 4,
+    "productId": 87,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-03 12:45:00"
+  },
+  {
+    "userId": 4,
+    "productId": 68,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-04 21:00:00"
+  },
+  {
+    "userId": 5,
+    "productId": 1,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 09:00:00"
+  },
+  {
+    "userId": 5,
+    "productId": 1,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-01 09:30:00"
+  },
+  {
+    "userId": 5,
+    "productId": 10,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 15:00:00"
+  },
+  {
+    "userId": 5,
+    "productId": 10,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-02 15:05:00"
+  },
+  {
+    "userId": 5,
+    "productId": 11,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 15:30:00"
+  },
+  {
+    "userId": 5,
+    "productId": 11,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-02 16:00:00"
+  },
+  {
+    "userId": 5,
+    "productId": 15,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 10:00:00"
+  },
+  {
+    "userId": 5,
+    "productId": 15,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-03 10:10:00"
+  },
+  {
+    "userId": 6,
+    "productId": 7,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 10:00:00"
+  },
+  {
+    "userId": 6,
+    "productId": 7,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-01 10:05:00"
+  },
+  {
+    "userId": 6,
+    "productId": 7,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-01 10:30:00"
+  },
+  {
+    "userId": 6,
+    "productId": 28,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 14:00:00"
+  },
+  {
+    "userId": 6,
+    "productId": 28,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-02 14:30:00"
+  },
+  {
+    "userId": 6,
+    "productId": 37,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 11:00:00"
+  },
+  {
+    "userId": 7,
+    "productId": 21,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 09:00:00"
+  },
+  {
+    "userId": 7,
+    "productId": 34,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 09:30:00"
+  },
+  {
+    "userId": 7,
+    "productId": 34,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-01 10:00:00"
+  },
+  {
+    "userId": 7,
+    "productId": 68,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 20:00:00"
+  },
+  {
+    "userId": 7,
+    "productId": 68,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-02 20:15:00"
+  },
+  {
+    "userId": 7,
+    "productId": 87,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 15:00:00"
+  },
+  {
+    "userId": 8,
+    "productId": 20,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 08:00:00"
+  },
+  {
+    "userId": 8,
+    "productId": 20,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-01 08:30:00"
+  },
+  {
+    "userId": 8,
+    "productId": 41,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 10:00:00"
+  },
+  {
+    "userId": 8,
+    "productId": 41,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-02 10:30:00"
+  },
+  {
+    "userId": 8,
+    "productId": 57,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 14:00:00"
+  },
+  {
+    "userId": 8,
+    "productId": 57,
+    "behaviorType": "ADD_CART",
+    "createdAt": "2026-01-03 14:10:00"
+  },
+  {
+    "userId": 9,
+    "productId": 6,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 11:00:00"
+  },
+  {
+    "userId": 9,
+    "productId": 6,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-01 11:30:00"
+  },
+  {
+    "userId": 9,
+    "productId": 5,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 16:00:00"
+  },
+  {
+    "userId": 9,
+    "productId": 5,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-02 16:30:00"
+  },
+  {
+    "userId": 9,
+    "productId": 61,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 20:00:00"
+  },
+  {
+    "userId": 9,
+    "productId": 61,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-03 20:15:00"
+  },
+  {
+    "userId": 10,
+    "productId": 3,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-01 13:00:00"
+  },
+  {
+    "userId": 10,
+    "productId": 3,
+    "behaviorType": "ADD_CART",
+    "createdAt": "2026-01-01 13:10:00"
+  },
+  {
+    "userId": 10,
+    "productId": 24,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-02 17:00:00"
+  },
+  {
+    "userId": 10,
+    "productId": 24,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-02 17:30:00"
+  },
+  {
+    "userId": 10,
+    "productId": 63,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-03 09:00:00"
+  },
+  {
+    "userId": 11,
+    "productId": 16,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-05 10:00:00"
+  },
+  {
+    "userId": 11,
+    "productId": 16,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-05 10:30:00"
+  },
+  {
+    "userId": 11,
+    "productId": 54,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-06 14:00:00"
+  },
+  {
+    "userId": 11,
+    "productId": 54,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-06 14:05:00"
+  },
+  {
+    "userId": 12,
+    "productId": 15,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-05 11:00:00"
+  },
+  {
+    "userId": 12,
+    "productId": 15,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-05 11:30:00"
+  },
+  {
+    "userId": 12,
+    "productId": 18,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-06 15:00:00"
+  },
+  {
+    "userId": 12,
+    "productId": 18,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-06 15:05:00"
+  },
+  {
+    "userId": 13,
+    "productId": 4,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-05 09:00:00"
+  },
+  {
+    "userId": 13,
+    "productId": 4,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-05 09:30:00"
+  },
+  {
+    "userId": 13,
+    "productId": 29,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-06 12:00:00"
+  },
+  {
+    "userId": 13,
+    "productId": 29,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-06 12:05:00"
+  },
+  {
+    "userId": 13,
+    "productId": 47,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-07 16:00:00"
+  },
+  {
+    "userId": 13,
+    "productId": 47,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-07 16:15:00"
+  },
+  {
+    "userId": 14,
+    "productId": 2,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-05 08:00:00"
+  },
+  {
+    "userId": 14,
+    "productId": 2,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-05 08:30:00"
+  },
+  {
+    "userId": 14,
+    "productId": 13,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-06 10:00:00"
+  },
+  {
+    "userId": 14,
+    "productId": 13,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-06 10:30:00"
+  },
+  {
+    "userId": 15,
+    "productId": 12,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-05 14:00:00"
+  },
+  {
+    "userId": 15,
+    "productId": 12,
+    "behaviorType": "ADD_CART",
+    "createdAt": "2026-01-05 14:10:00"
+  },
+  {
+    "userId": 15,
+    "productId": 40,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-06 18:00:00"
+  },
+  {
+    "userId": 15,
+    "productId": 40,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-06 18:15:00"
+  },
+  {
+    "userId": 16,
+    "productId": 8,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-07 10:00:00"
+  },
+  {
+    "userId": 16,
+    "productId": 8,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-07 10:30:00"
+  },
+  {
+    "userId": 16,
+    "productId": 39,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-08 14:00:00"
+  },
+  {
+    "userId": 16,
+    "productId": 39,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-08 14:15:00"
+  },
+  {
+    "userId": 17,
+    "productId": 17,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-07 11:00:00"
+  },
+  {
+    "userId": 17,
+    "productId": 17,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-07 11:30:00"
+  },
+  {
+    "userId": 17,
+    "productId": 38,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-08 15:00:00"
+  },
+  {
+    "userId": 17,
+    "productId": 38,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-08 15:05:00"
+  },
+  {
+    "userId": 18,
+    "productId": 21,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-07 09:00:00"
+  },
+  {
+    "userId": 18,
+    "productId": 34,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-07 09:30:00"
+  },
+  {
+    "userId": 18,
+    "productId": 34,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-07 10:00:00"
+  },
+  {
+    "userId": 19,
+    "productId": 19,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-08 10:00:00"
+  },
+  {
+    "userId": 19,
+    "productId": 19,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-08 10:30:00"
+  },
+  {
+    "userId": 19,
+    "productId": 90,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-09 14:00:00"
+  },
+  {
+    "userId": 19,
+    "productId": 90,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-09 14:30:00"
+  },
+  {
+    "userId": 19,
+    "productId": 28,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-10 16:00:00"
+  },
+  {
+    "userId": 19,
+    "productId": 28,
+    "behaviorType": "ADD_CART",
+    "createdAt": "2026-01-10 16:10:00"
+  },
+  {
+    "userId": 20,
+    "productId": 1,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-08 08:00:00"
+  },
+  {
+    "userId": 20,
+    "productId": 1,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-08 08:30:00"
+  },
+  {
+    "userId": 20,
+    "productId": 52,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-09 12:00:00"
+  },
+  {
+    "userId": 20,
+    "productId": 52,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-09 12:15:00"
+  },
+  {
+    "userId": 21,
+    "productId": 42,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-10 10:00:00"
+  },
+  {
+    "userId": 21,
+    "productId": 42,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-10 10:30:00"
+  },
+  {
+    "userId": 21,
+    "productId": 42,
+    "behaviorType": "RATE",
+    "createdAt": "2026-01-15 10:00:00"
+  },
+  {
+    "userId": 22,
+    "productId": 47,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-10 11:00:00"
+  },
+  {
+    "userId": 22,
+    "productId": 47,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-10 11:30:00"
+  },
+  {
+    "userId": 23,
+    "productId": 9,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-10 14:00:00"
+  },
+  {
+    "userId": 23,
+    "productId": 9,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-10 14:30:00"
+  },
+  {
+    "userId": 24,
+    "productId": 22,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-10 15:00:00"
+  },
+  {
+    "userId": 24,
+    "productId": 36,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-10 15:30:00"
+  },
+  {
+    "userId": 25,
+    "productId": 43,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-11 10:00:00"
+  },
+  {
+    "userId": 25,
+    "productId": 43,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-11 10:30:00"
+  },
+  {
+    "userId": 26,
+    "productId": 27,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-11 12:00:00"
+  },
+  {
+    "userId": 26,
+    "productId": 27,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-11 12:15:00"
+  },
+  {
+    "userId": 27,
+    "productId": 10,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-12 14:00:00"
+  },
+  {
+    "userId": 27,
+    "productId": 10,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-12 14:30:00"
+  },
+  {
+    "userId": 28,
+    "productId": 84,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-12 16:00:00"
+  },
+  {
+    "userId": 28,
+    "productId": 84,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-12 16:15:00"
+  },
+  {
+    "userId": 29,
+    "productId": 38,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-13 10:00:00"
+  },
+  {
+    "userId": 29,
+    "productId": 38,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-13 10:30:00"
+  },
+  {
+    "userId": 30,
+    "productId": 44,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-13 14:00:00"
+  },
+  {
+    "userId": 30,
+    "productId": 44,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-13 14:30:00"
+  },
+  {
+    "userId": 31,
+    "productId": 45,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-14 10:00:00"
+  },
+  {
+    "userId": 31,
+    "productId": 45,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-14 10:30:00"
+  },
+  {
+    "userId": 32,
+    "productId": 62,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-14 12:00:00"
+  },
+  {
+    "userId": 32,
+    "productId": 62,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-14 12:15:00"
+  },
+  {
+    "userId": 33,
+    "productId": 47,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-14 14:00:00"
+  },
+  {
+    "userId": 34,
+    "productId": 56,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-15 10:00:00"
+  },
+  {
+    "userId": 34,
+    "productId": 56,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-15 10:30:00"
+  },
+  {
+    "userId": 35,
+    "productId": 38,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-15 12:00:00"
+  },
+  {
+    "userId": 35,
+    "productId": 48,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-15 12:30:00"
+  },
+  {
+    "userId": 36,
+    "productId": 58,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-15 14:00:00"
+  },
+  {
+    "userId": 36,
+    "productId": 58,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-15 14:30:00"
+  },
+  {
+    "userId": 37,
+    "productId": 54,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-16 10:00:00"
+  },
+  {
+    "userId": 37,
+    "productId": 37,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-16 10:30:00"
+  },
+  {
+    "userId": 38,
+    "productId": 28,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-16 14:00:00"
+  },
+  {
+    "userId": 38,
+    "productId": 28,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-16 14:30:00"
+  },
+  {
+    "userId": 39,
+    "productId": 29,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-16 16:00:00"
+  },
+  {
+    "userId": 40,
+    "productId": 57,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-17 10:00:00"
+  },
+  {
+    "userId": 40,
+    "productId": 57,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-17 10:30:00"
+  },
+  {
+    "userId": 41,
+    "productId": 19,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-17 12:00:00"
+  },
+  {
+    "userId": 41,
+    "productId": 19,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-17 12:30:00"
+  },
+  {
+    "userId": 42,
+    "productId": 27,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-17 14:00:00"
+  },
+  {
+    "userId": 42,
+    "productId": 27,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-17 14:15:00"
+  },
+  {
+    "userId": 43,
+    "productId": 24,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-18 10:00:00"
+  },
+  {
+    "userId": 43,
+    "productId": 24,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-18 10:30:00"
+  },
+  {
+    "userId": 44,
+    "productId": 61,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-18 12:00:00"
+  },
+  {
+    "userId": 44,
+    "productId": 61,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-18 12:15:00"
+  },
+  {
+    "userId": 45,
+    "productId": 11,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-18 14:00:00"
+  },
+  {
+    "userId": 45,
+    "productId": 11,
+    "behaviorType": "ADD_CART",
+    "createdAt": "2026-01-18 14:10:00"
+  },
+  {
+    "userId": 46,
+    "productId": 21,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-19 10:00:00"
+  },
+  {
+    "userId": 46,
+    "productId": 21,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-19 10:30:00"
+  },
+  {
+    "userId": 47,
+    "productId": 7,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-19 14:00:00"
+  },
+  {
+    "userId": 47,
+    "productId": 7,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-19 14:30:00"
+  },
+  {
+    "userId": 48,
+    "productId": 87,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-19 16:00:00"
+  },
+  {
+    "userId": 48,
+    "productId": 87,
+    "behaviorType": "PURCHASE",
+    "createdAt": "2026-01-19 16:15:00"
+  },
+  {
+    "userId": 49,
+    "productId": 15,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-20 10:00:00"
+  },
+  {
+    "userId": 49,
+    "productId": 15,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-20 10:05:00"
+  },
+  {
+    "userId": 50,
+    "productId": 30,
+    "behaviorType": "VIEW",
+    "createdAt": "2026-01-20 14:00:00"
+  },
+  {
+    "userId": 50,
+    "productId": 30,
+    "behaviorType": "CLICK",
+    "createdAt": "2026-01-20 14:05:00"
+  }
+]

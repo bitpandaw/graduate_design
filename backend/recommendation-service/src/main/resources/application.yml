@@ -14,10 +14,10 @@ spring:
       ddl-auto: update
     show-sql: true
 
-# Wide & Deep 推荐模型配置（论文第3-4章）
+# SASRec 推荐模型配置
 recommendation:
   python:
     url: http://localhost:8090   # Python FastAPI 推理服务地址
   candidate:
-    pool: 50                     # 候选商品池大小（传入 Wide & Deep 打分的商品数量）
+    pool: 50                     # 候选商品池大小（传入 SASRec 打分的商品数量）
 
