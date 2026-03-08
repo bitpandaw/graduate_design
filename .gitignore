@@ -1,0 +1,58 @@
+# ── Java / Maven ──────────────────────────────
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+
+# ── Python ────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
+venv/
+env/
+.env
+
+# ── PyTorch 模型文件（体积大，不上传）─────────
+*.pt
+*.pth
+*.onnx
+backend/recommendation-service/python/model/
+
+# ── Node.js / 前端 ────────────────────────────
+node_modules/
+frontend/dist/
+*.log
+npm-debug.log*
+
+# ── IDE ───────────────────────────────────────
+.idea/
+.vscode/
+*.iml
+.project
+.classpath
+.settings/
+
+# ── 系统文件 ──────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── 临时文件 ──────────────────────────────────
+*.tmp
+*.bak
+*.swp
+*.txt.bak
+
+# ── 论文 txt 提取文件（从 PDF/docx 生成，不上传）
+graduate_thesis/*.txt

@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: mall-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:5173"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: true
+      routes:
+        - id: user_service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/users/**
+
+        - id: product_service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/products/**
+
+        - id: order_service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/orders/**
+
+        - id: recommendation_service
+          uri: http://localhost:8084
+          predicates:
+            - Path=/api/recommendations/**
+
+        - id: search_service
+          uri: http://localhost:8085
+          predicates:
+            - Path=/api/search/**
+
+        - id: payment_service
+          uri: http://localhost:8086
+          predicates:
+            - Path=/api/payments/**
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
