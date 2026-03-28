@@ -2,17 +2,16 @@
 """
 SASRec 模型训练脚本
 
-支持数据源：
-  1. behaviors.json - 项目行为数据（userId, productId, createdAt）
-  2. Amazon Beauty - JSON (reviews_Beauty_5.json.gz) 或 CSV (ratings_Beauty.csv)
-     下载: https://snap.stanford.edu/data/amazon/productGraph/categoryFiles/
+数据源：Amazon Beauty
+  - JSON: reviews_Beauty_5.json.gz（5-core，约198k条）
+  - CSV:  ratings_Beauty.csv（全量，约2M条）
+  下载: python download_amazon_beauty.py
 """
 
 import gzip
 import os
 import json
 import argparse
-from datetime import datetime
 from collections import defaultdict
 
 import torch
@@ -52,62 +51,17 @@ def load_amazon_beauty_json(path: str) -> list[tuple[str, str, int]]:
     return rows
 
 
-def load_amazon_beauty_csv(path: str) -> list[tuple[str, str, int]]:
-    """
-    加载 Amazon Beauty CSV (ratings_Beauty.csv)
-    格式: userId, productId, rating, timestamp（可能有表头）
-    返回 [(userId, productId, timestamp), ...]
-    """
-    rows = []
-    with open(path, "r", encoding="utf-8", errors="ignore") as f:
-        for line in f:
-            parts = line.strip().split(",")
-            if len(parts) < 4:
-                continue
-            uid, pid = parts[0].strip(), parts[1].strip()
-            if uid.lower() in ("userid", "user") or pid.lower() in ("productid", "item", "asin"):
-                continue
-            ts = 0
-            try:
-                ts = int(parts[3].strip())
-            except (ValueError, IndexError):
-                pass
-            if uid and pid:
-                rows.append((uid, pid, ts))
-    return rows
-
-
-def load_behaviors_json(path: str) -> list[tuple[int, int, datetime]]:
-    """加载项目 behaviors.json，返回 [(userId, productId, createdAt), ...]"""
-    with open(path, "r", encoding="utf-8") as f:
-        raw = json.load(f)
-    result = []
-    for row in raw:
-        uid = int(row["userId"])
-        pid = int(row["productId"])
-        ts_str = row.get("createdAt", "") or ""
-        ts_str = str(ts_str).strip().replace("T", " ")[:19]
-        try:
-            ts = datetime.strptime(ts_str, "%Y-%m-%d %H:%M:%S")
-        except (ValueError, TypeError):
-            ts = datetime.min
-        result.append((uid, pid, ts))
-    return result
-
-
 def _map_ids_and_build_sequences(
-    rows: list[tuple[str | int, str | int, int | datetime]],
-    time_is_unix: bool,
+    rows: list[tuple[str, str, int]],
 ) -> tuple[list[tuple[list[int], int]], int]:
     """
     将原始行映射为整数 ID，构建 (seq, next_item) 样本
-    rows: (user_id/str, item_id/str, timestamp)
-    time_is_unix: True 表示时间戳为 unix，False 为 datetime
+    rows: (user_id, item_id, unix_timestamp)
     返回 (samples, num_items)
     """
     user2id = {}
     item2id = {}
-    by_user: dict[int, list[tuple[int, int | datetime]]] = defaultdict(list)
+    by_user: dict[int, list[tuple[int, int]]] = defaultdict(list)
 
     for uid_raw, pid_raw, ts in rows:
         uid = user2id.setdefault(uid_raw, len(user2id) + 1)
@@ -129,22 +83,12 @@ def _map_ids_and_build_sequences(
 
 
 def load_data(path: str, dataset: str) -> tuple[list[tuple[list[int], int]], int]:
-    """
-    根据 dataset 类型加载数据，返回 (samples, num_items)
-    dataset: "behaviors" | "amazon_json" | "amazon_csv"
-    """
-    if dataset == "amazon_json":
-        rows = load_amazon_beauty_json(path)
-        return _map_ids_and_build_sequences(rows, time_is_unix=True)
+    """加载 Amazon Beauty 数据，返回 (samples, num_items)"""
     if dataset == "amazon_csv":
         rows = load_amazon_beauty_csv(path)
-        return _map_ids_and_build_sequences(rows, time_is_unix=True)
-    # behaviors
-    rows = load_behaviors_json(path)
-    return _map_ids_and_build_sequences(
-        [(uid, pid, ts) for uid, pid, ts in rows],
-        time_is_unix=False,
-    )
+    else:
+        rows = load_amazon_beauty_json(path)
+    return _map_ids_and_build_sequences(rows)
 
 
 class SASRecDataset(Dataset):
@@ -217,6 +161,8 @@ def train(args):
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.5)
 
     best_val_loss = float("inf")
+    # 记录每一轮的 loss，方便后续画论文中的训练曲线
+    loss_history = []
     for epoch in range(1, args.epochs + 1):
         model.train()
         train_loss = 0.0
@@ -248,12 +194,21 @@ def train(args):
             f"  Epoch {epoch:3d}/{args.epochs} | train_loss={train_loss:.4f} | val_loss={val_loss:.4f}"
         )
 
+        # 追加到内存中的历史，训练结束一次性写入文件
+        loss_history.append(
+            {
+                "epoch": epoch,
+                "train_loss": float(train_loss),
+                "val_loss": float(val_loss),
+            }
+        )
+
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             torch.save(model.state_dict(), args.model_out + ".best.pt")
 
     # ── 保存模型与配置 ───────────────────────────────────────
-    print("[4/4] 保存模型...")
+    print("[4/4] 保存模型与训练日志...")
     torch.save(model.state_dict(), args.model_out + ".pt")
 
     config = {
@@ -267,6 +222,15 @@ def train(args):
     with open(args.model_out + ".config.json", "w", encoding="utf-8") as f:
         json.dump(config, f, ensure_ascii=False, indent=2)
 
+    # 保存每一轮训练/验证损失，供 generate_thesis_charts.py 使用真实数据画图
+    loss_log_path = args.model_out + ".loss_history.json"
+    try:
+        with open(loss_log_path, "w", encoding="utf-8") as f:
+            json.dump(loss_history, f, ensure_ascii=False, indent=2)
+        print(f"  训练损失日志: {loss_log_path}")
+    except Exception as e:
+        print(f"[警告] 无法写入训练损失日志 {loss_log_path}: {e}")
+
     print("\n[OK] 训练完成!")
     print(f"  最优验证损失: {best_val_loss:.4f}")
     print(f"  模型文件: {args.model_out}.pt")
@@ -277,14 +241,14 @@ def main():
     parser = argparse.ArgumentParser(description="SASRec 推荐模型训练")
     parser.add_argument(
         "--data",
-        default="data/behaviors.json",
-        help="数据文件路径（JSON/CSV/GZ）",
+        default="data/reviews_Beauty_5.json.gz",
+        help="Amazon Beauty 数据路径（JSON/GZ 或 CSV）",
     )
     parser.add_argument(
         "--dataset",
-        choices=["behaviors", "amazon_json", "amazon_csv"],
-        default="behaviors",
-        help="数据集类型: behaviors=项目JSON | amazon_json=Amazon Beauty JSON | amazon_csv=Amazon Beauty CSV",
+        choices=["amazon_json", "amazon_csv"],
+        default="amazon_json",
+        help="格式: amazon_json=JSON 5-core | amazon_csv=CSV 全量",
     )
     parser.add_argument("--model-out", default="model/sasrec", help="模型输出路径前缀")
     parser.add_argument("--max-len", type=int, default=50, help="最大序列长度")

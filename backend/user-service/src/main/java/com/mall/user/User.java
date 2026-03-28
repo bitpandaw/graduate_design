@@ -23,7 +23,14 @@ public class User {
 
     private BigDecimal balance;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     public enum UserLevel {
         BRONZE, SILVER, GOLD, PLATINUM
+    }
+
+    public enum Role {
+        USER, ADMIN
     }
 }

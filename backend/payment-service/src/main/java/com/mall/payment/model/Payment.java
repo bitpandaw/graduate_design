@@ -15,9 +15,9 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long orderId;
     private Long userId;
+    
     private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)

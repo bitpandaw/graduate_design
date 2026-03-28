@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -19,8 +20,22 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     @ElementCollection
     private List<OrderItem> items;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     public enum Status {
         PENDING, PAID, SHIPPED, DELIVERED, CANCELLED

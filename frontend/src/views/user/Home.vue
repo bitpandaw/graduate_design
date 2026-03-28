@@ -2,7 +2,7 @@
   <div>
     <section class="hero">
       <h1>电商推荐系统</h1>
-      <p>基于 Wide & Deep 推荐模型的智能电商平台</p>
+      <p>基于 SASRec 深度序列推荐模型的智能电商平台</p>
       <router-link to="/products" class="btn btn-primary hero-btn">浏览商品</router-link>
     </section>
 
